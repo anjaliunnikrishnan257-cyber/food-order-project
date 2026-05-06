@@ -1,15 +1,18 @@
 from flask import Flask, render_template, request, redirect, session
-import mysql.connector
+import psycopg2
+import os
 
 app = Flask(__name__)
-app.secret_key = "secret123"   # required for cart
+app.secret_key = "secret123"
 
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root",  # your password
-    database="food_order"
-)
+# 🔗 Connect to PostgreSQL (Render)
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+try:
+    db = psycopg2.connect(DATABASE_URL)
+    print("✅ Database Connected")
+except Exception as e:
+    print("❌ DB Error:", e)
 
 # 🏠 Home Page
 @app.route('/')
@@ -56,8 +59,12 @@ def place_order():
 
     total = sum(item['price'] for item in cart)
 
-    cursor.execute("INSERT INTO orders (total_amount) VALUES (%s)", (total,))
-    order_id = cursor.lastrowid
+    # 🔥 IMPORTANT: PostgreSQL insert fix
+    cursor.execute(
+        "INSERT INTO orders (total_amount) VALUES (%s) RETURNING order_id",
+        (total,)
+    )
+    order_id = cursor.fetchone()[0]
 
     for item in cart:
         cursor.execute(
@@ -70,5 +77,7 @@ def place_order():
 
     return "✅ Order Placed Successfully!"
 
+# 🚀 Run app (Render compatible)
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
