@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Order</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 15px auto;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .card:hover {
+            background: #e0f7fa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🍴 Restaurants</h1>
+
+    {% for r in restaurants %}
+        <a href="/menu/{{ r[0] }}">
+            <div class="card">
+                <h3>{{ r[1] }}</h3>
+                <p>{{ r[2] }}</p>
+            </div>
+        </a>
+    {% endfor %}
+
+</body>
+</html>

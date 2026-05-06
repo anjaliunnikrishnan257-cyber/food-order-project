@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #fafafa;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .item {
+            background: white;
+            margin: 15px auto;
+            padding: 15px;
+            width: 320px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .top-bar {
+            margin: 20px;
+        }
+
+        .top-bar a {
+            margin: 10px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <a href="/">⬅ Back</a>
+        <a href="/cart">🛒 View Cart</a>
+    </div>
+
+    <h1>🍽️ Menu</h1>
+
+    {% for item in items %}
+        <div class="item">
+            <form action="/add_to_cart" method="POST">
+                <h3>{{ item[2] }}</h3>
+                <p>₹ {{ item[3] }}</p>
+
+                <input type="hidden" name="item_name" value="{{ item[2] }}">
+                <input type="hidden" name="price" value="{{ item[3] }}">
+
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    {% endfor %}
+
+</body>
+</html>
